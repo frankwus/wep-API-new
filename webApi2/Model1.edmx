@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Workinstruction_testModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="aaJobStep">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="description" Type="varchar(max)" />
+          <Property Name="warning" Type="varchar(max)" />
+          <Property Name="caution" Type="varchar(max)" />
+          <Property Name="note" Type="varchar(max)" />
+          <Property Name="photo" Type="varchar(max)" />
+          <Property Name="wiid" Type="int" />
+          <Property Name="barrier" Type="bit" />
+        </EntityType>
+        <EntityType Name="aaWi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="jobTitle" Type="varchar(max)" />
+          <Property Name="facility" Type="varchar(max)" />
+          <Property Name="status" Type="varchar(max)" />
+          <Property Name="generalPrecaution" Type="varchar(max)" />
+          <Property Name="equipmentType" Type="int" />
+          <Property Name="equipmentMake" Type="int" />
+          <Property Name="localPrecaution" Type="varchar(max)" />
+          <Property Name="wiNo" Type="varchar(max)" />
+        </EntityType>
+        <EntityContainer Name="Workinstruction_testModelStoreContainer">
+          <EntitySet Name="aaJobStep" EntityType="Self.aaJobStep" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="aaWi" EntityType="Self.aaWi" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Workinstruction_testModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Workinstruction_testEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="aaJobSteps" EntityType="Workinstruction_testModel.aaJobStep" />
+          <EntitySet Name="aaWis" EntityType="Workinstruction_testModel.aaWi" />
+        </EntityContainer>
+        <EntityType Name="aaJobStep">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="warning" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="caution" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="note" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="wiid" Type="Int32" />
+          <Property Name="barrier" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="aaWi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="jobTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="facility" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="generalPrecaution" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="equipmentType" Type="Int32" />
+          <Property Name="equipmentMake" Type="Int32" />
+          <Property Name="localPrecaution" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="wiNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Workinstruction_testModelStoreContainer" CdmEntityContainer="Workinstruction_testEntities">
+          <EntitySetMapping Name="aaJobSteps">
+            <EntityTypeMapping TypeName="Workinstruction_testModel.aaJobStep">
+              <MappingFragment StoreEntitySet="aaJobStep">
+                <ScalarProperty Name="barrier" ColumnName="barrier" />
+                <ScalarProperty Name="wiid" ColumnName="wiid" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="note" ColumnName="note" />
+                <ScalarProperty Name="caution" ColumnName="caution" />
+                <ScalarProperty Name="warning" ColumnName="warning" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="aaWis">
+            <EntityTypeMapping TypeName="Workinstruction_testModel.aaWi">
+              <MappingFragment StoreEntitySet="aaWi">
+                <ScalarProperty Name="wiNo" ColumnName="wiNo" />
+                <ScalarProperty Name="localPrecaution" ColumnName="localPrecaution" />
+                <ScalarProperty Name="equipmentMake" ColumnName="equipmentMake" />
+                <ScalarProperty Name="equipmentType" ColumnName="equipmentType" />
+                <ScalarProperty Name="generalPrecaution" ColumnName="generalPrecaution" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="facility" ColumnName="facility" />
+                <ScalarProperty Name="jobTitle" ColumnName="jobTitle" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
