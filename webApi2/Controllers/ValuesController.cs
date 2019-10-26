@@ -29,6 +29,7 @@ namespace WebApi2.Controllers
 
     // [EnableCors(origins: "http://localhost:81", headers: "*", methods: "*")]
     //[EnableCors(origins: "http://localhost:81", headers: "*",methods: "*", SupportsCredentials = true)]
+    [RoutePrefix("api/Values")]
     public class ValuesController : ApiController
     {
         private Workinstruction_testEntities entity = new Workinstruction_testEntities(); 
@@ -38,6 +39,7 @@ namespace WebApi2.Controllers
         //  KPI_Datamart_1Entities1 db = new KPI_Datamart_1Entities1();
         // GET api/values
         [Authorize(Users = "ensco\\011311")]
+        [Route("")]
         public IEnumerable<  aaWi> Get() {
 
             //return db.a0.Select(s => new { s.name }); 
@@ -49,7 +51,7 @@ namespace WebApi2.Controllers
             //userManager.AddToRole("011311", "admin"); 
             return this.entity.aaWis; 
         }
-        [Route("api/values/equipment/{id:int=0}")]
+        [Route("equipment/{id:int=0}")]
         public IHttpActionResult  GetEquipment(int? id ) {
             string sql = "select id, name from equipmentType where lang='e' ";
             if (id != 0)
@@ -59,6 +61,7 @@ namespace WebApi2.Controllers
             return Ok(data);
         }
         //GET api/values/5
+        [Route("{id:int}")]
         public IHttpActionResult Get(int id) {
 
             var wi = this.entity.aaWis.Where(t => t.id == id).FirstOrDefault();
@@ -71,14 +74,61 @@ namespace WebApi2.Controllers
         }
         //   ClaimsIdentityFactory
         // POST api/values
-        public string  Post() {
+        public string  wPost() {
+
+
             var httpRequest = HttpContext.Current.Request;
+
             return  this.UpdateFiles(httpRequest.Files);
         }
+        [HttpPost]
+        [Route("")]
+        public int  Post( MyModel m   ) {
+            using (var tran = this.entity.Database.BeginTransaction()) {
+                try {
+                    //this.entity.Entry(m.header).State = System.Data.Entity.EntityState.Modified ;
+                    this.entity.SaveChanges();
+                    if (m.header.id == 0) {
+                        aaWi header= this.entity.aaWis.Add(m.header);
+                        this.entity.SaveChanges();
+                        m.header.id = header.id; 
+                    } else {
+                        this.entity.Entry(m.header).State = System.Data.Entity.EntityState.Modified;
+                    }
+                    int wiid = m.header.id;
 
-        //public void Post(MyModel m ) {
+                    foreach (aaJobStep js in m.jobSteps)
+                        js.wiid = wiid; 
+                    List<int> list = m.jobSteps.Select(j => j.id).ToList();
+                    var deleted = this.entity.aaJobSteps.Where(j => j.wiid == wiid && !list.Contains(j.id));
+                    this.entity.aaJobSteps.RemoveRange(deleted);
+                    var added = m.jobSteps.Where(t => t.id == 0);
 
-        //}
+                    this.entity.aaJobSteps.AddRange(added); 
+                    var updated= this.entity.aaJobSteps.Where(j => j.wiid == wiid && list.Contains(j.id));
+                    foreach(aaJobStep js in m.jobSteps) {
+                        if (!list.Contains(js.id) || js.id==0)
+                            continue;
+                        this.entity.Entry(js).State = System.Data.Entity.EntityState.Modified; 
+                    }
+                    //this.entity.Entry()
+                    this.entity.SaveChanges();
+                    tran.Commit();
+                    return wiid; 
+
+                } catch (Exception e) {
+                    tran.Rollback();
+                    throw;
+                }
+            }
+            return 0; 
+        }
+        [HttpPost]
+        [Route("file")]
+        public string  Post() {
+            var httpRequest = HttpContext.Current.Request;
+            return this.UpdateFiles(httpRequest.Files);
+        }
         string UpdateFiles(HttpFileCollection files) {
             string imgFolder = @"c:\dev\emoc\images\";
             try {
@@ -118,7 +168,15 @@ namespace WebApi2.Controllers
         // DELETE api/values/5
         public void Delete(int id) {
         }
+        [HttpGet]
+        [Route("Search/{text}")]
+        public IHttpActionResult Search(string text ) {
+            string sql = " exec usp_WiTools '"  + text + "'"; 
+            var data = this.entity.Database.SqlQuery<MyList>(sql);
+            return Ok(data);
+        }
     }
+
     public class MyModel
     {
         public aaWi header;
